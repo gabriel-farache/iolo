@@ -9,13 +9,20 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
 public class Capteur implements Runnable {
-	public static final int SLEEP_TIME = 500 ;
-	private ICapteursFonctions capteur;
-	protected static CapteurController controller ;
+	public static int RIGHT_LIGHT_NOIR = 30;
+	public static int RIGHT_LIGHT_BLANC = 60;
+	public static int RIGHT_LIGHT_GRIS = 40;
 
-	public Capteur(ICapteursFonctions capteur,CapteurController controller) {
+	public static int MIDDLE_LIGHT_NOIR = 37;
+	public static int MIDDLE_LIGHT_BLANC = 66;
+	public static int MIDDLE_LIGHT_GRIS = 48;
+	public static final int SLEEP_TIME = 200;
+	private ICapteursFonctions capteur;
+	protected static CapteurController controller;
+
+	public Capteur(ICapteursFonctions capteur, CapteurController controller) {
 		this.capteur = capteur;
-		this.controller = controller ;
+		this.controller = controller;
 	}
 
 	public int detecter() {
@@ -24,7 +31,7 @@ public class Capteur implements Runnable {
 
 	@Override
 	public void run() {
-		while (true){
+		while (true) {
 			this.capteur.executerDetection();
 			try {
 				Thread.sleep(SLEEP_TIME);
@@ -32,45 +39,45 @@ public class Capteur implements Runnable {
 			}
 		}
 	}
-	
+
 	public static void calibrateRight() {
 		LCD.drawString("Droite blanc", 0, 0);
-		while(!Button.ENTER.isDown()) {
-			
+		while (!Button.ENTER.isDown()) {
+
 		}
 		LCD.clear();
-		ICapteursFonctions.RIGHT_LIGHT_BLANC = SensorPort.S3.readValue();
+		Capteur.RIGHT_LIGHT_BLANC = SensorPort.S3.readValue();
 		LCD.drawString("Droite gris", 0, 0);
-		while(!Button.ENTER.isDown()) {
-			
+		while (!Button.ENTER.isDown()) {
+
 		}
 		LCD.clear();
-		ICapteursFonctions.RIGHT_LIGHT_GRIS = SensorPort.S3.readValue();
+		Capteur.RIGHT_LIGHT_GRIS = SensorPort.S3.readValue();
 		LCD.drawString("Droite noir", 0, 0);
-		while(!Button.ENTER.isDown()) {
-			
+		while (!Button.ENTER.isDown()) {
+
 		}
-		ICapteursFonctions.RIGHT_LIGHT_NOIR = SensorPort.S3.readValue();
+		Capteur.RIGHT_LIGHT_NOIR = SensorPort.S3.readValue();
 	}
-	
+
 	public static void calibrateMiddle() {
 		LCD.clear();
 		LCD.drawString("Milieu blanc", 0, 0);
-		while(!Button.ENTER.isDown()) {
-			
+		while (!Button.ENTER.isDown()) {
+
 		}
-		ICapteursFonctions.MIDDLE_LIGHT_BLANC = SensorPort.S3.readValue();
+		Capteur.MIDDLE_LIGHT_BLANC = SensorPort.S3.readValue();
 		LCD.clear();
 		LCD.drawString("Milieu gris", 0, 0);
-		while(!Button.ENTER.isDown()) {
-			
+		while (!Button.ENTER.isDown()) {
+
 		}
-		ICapteursFonctions.MIDDLE_LIGHT_GRIS = SensorPort.S3.readValue();
+		Capteur.MIDDLE_LIGHT_GRIS = SensorPort.S3.readValue();
 		LCD.clear();
 		LCD.drawString("Milieu noir", 0, 0);
-		while(!Button.ENTER.isDown()) {
-			
+		while (!Button.ENTER.isDown()) {
+
 		}
-		ICapteursFonctions.MIDDLE_LIGHT_NOIR = SensorPort.S3.readValue();
+		Capteur.MIDDLE_LIGHT_NOIR = SensorPort.S3.readValue();
 	}
 }

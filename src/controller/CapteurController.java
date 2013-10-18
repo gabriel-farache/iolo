@@ -26,8 +26,8 @@ public class CapteurController {
 	}
 
 	public void start(){
-		Capteur.calibrateRight();
-		Capteur.calibrateMiddle();
+		//Capteur.calibrateRight();
+		//Capteur.calibrateMiddle();
 		trc.start();
 		tmc.start();
 		tuc.start();
@@ -36,23 +36,23 @@ public class CapteurController {
 
 	public void setRc(int rc) {
 		this.rc = rc;
-		if (Math.abs(rc - ICapteursFonctions.RIGHT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
+		if (Math.abs(rc - Capteur.RIGHT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
 			estEnVirage = true ;
 			moteur.ralentir(1f);
 			virageImminent();
-		} else if (Math.abs(rc - ICapteursFonctions.RIGHT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
+		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
 			moteur.turn(CORRECTION_ANGLE);
-		} else if ((Math.abs(rc - ICapteursFonctions.RIGHT_LIGHT_NOIR) > ICapteursFonctions.OFFSET) && estEnVirage ) {
+		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) > ICapteursFonctions.OFFSET) && estEnVirage ) {
 			estEnVirage = false ;
 			moteur.accelerer(2);
-		} else if (Math.abs(rc - ICapteursFonctions.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET){
+		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET){
 			moteur.turn(-CORRECTION_ANGLE);
 		}
 	}
 
 	public void setMc(int mc) {
 		this.mc = mc;
-		if (Math.abs(mc - ICapteursFonctions.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET) {
+		if (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET) {
 			moteur.turn(0);
 		} else {
 			moteur.turn(-CORRECTION_ANGLE);
@@ -81,9 +81,7 @@ public class CapteurController {
 		default:
 			break;
 		}
-		if(cc >= 0 && cc <= 10) {
-			new Son().playLego(cc);
-		}
+		
 	}
 
 	public void virageImminent() {
