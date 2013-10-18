@@ -38,11 +38,13 @@ public class Capteur implements Runnable {
 		while(!Button.ENTER.isDown()) {
 			
 		}
+		LCD.clear();
 		ICapteursFonctions.RIGHT_LIGHT_BLANC = SensorPort.S3.readValue();
 		LCD.drawString("Droite gris", 0, 0);
 		while(!Button.ENTER.isDown()) {
 			
 		}
+		LCD.clear();
 		ICapteursFonctions.RIGHT_LIGHT_GRIS = SensorPort.S3.readValue();
 		LCD.drawString("Droite noir", 0, 0);
 		while(!Button.ENTER.isDown()) {
@@ -52,16 +54,19 @@ public class Capteur implements Runnable {
 	}
 	
 	public static void calibrateMiddle() {
+		LCD.clear();
 		LCD.drawString("Milieu blanc", 0, 0);
 		while(!Button.ENTER.isDown()) {
 			
 		}
 		ICapteursFonctions.MIDDLE_LIGHT_BLANC = SensorPort.S3.readValue();
+		LCD.clear();
 		LCD.drawString("Milieu gris", 0, 0);
 		while(!Button.ENTER.isDown()) {
 			
 		}
 		ICapteursFonctions.MIDDLE_LIGHT_GRIS = SensorPort.S3.readValue();
+		LCD.clear();
 		LCD.drawString("Milieu noir", 0, 0);
 		while(!Button.ENTER.isDown()) {
 			

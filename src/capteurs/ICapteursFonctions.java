@@ -4,7 +4,7 @@ public interface ICapteursFonctions {
 	public final static int OFFSET = 4;
 	
 	public static int RIGHT_LIGHT_NOIR = 30;
-	public final static int RIGHT_LIGHT_BLANC = 60;
+	public static int RIGHT_LIGHT_BLANC = 60;
 	public static int RIGHT_LIGHT_GRIS = 40;
 	
 	public static int MIDDLE_LIGHT_NOIR = 37;
