@@ -4,4 +4,7 @@
 *.jar
 *.war
 *.ear
+
+*.nxd
+*.nxj
 /bin
