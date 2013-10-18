@@ -5,29 +5,43 @@ import java.io.File;
 import lejos.nxt.Sound;
 
 public class Son {
-	private File fichierSon1;
-	private File fichierSon2;
-	private File fichierSon3;
-	private static final String urlFichierSonTour1 = "/home/etiik/Bureau/aircraft001.wav";
-	private static final String urlFichierSonTour2 = "";
-	private static final String urlFichierSonTour3 = "";
-
 	public Son() {
-		this.fichierSon1 = new File(urlFichierSonTour1);
-		this.fichierSon2 = new File(urlFichierSonTour2);
-		this.fichierSon3 = new File(urlFichierSonTour3);
 	}
 
-	public void playLego(int nbTour) {
-		switch (nbTour) {
+	public void playLego(int nbToRead) {
+		switch (nbToRead) {
+		case 0:
+			Sound.playSample(new File("00.wav"));
+			break;
 		case 1:
-			Sound.playSample(fichierSon1);
+			Sound.playSample(new File("01.wav"));
 			break;
 		case 2:
-			Sound.playSample(fichierSon2);
+			Sound.playSample(new File("02.wav"));
 			break;
 		case 3:
-			Sound.playSample(fichierSon3);
+			Sound.playSample(new File("03.wav"));
+			break;
+		case 4:
+			Sound.playSample(new File("04.wav"));
+			break;
+		case 5:
+			Sound.playSample(new File("05.wav"));
+			break;
+		case 6:
+			Sound.playSample(new File("06.wav"));
+			break;
+		case 7:
+			Sound.playSample(new File("07.wav"));
+			break;
+		case 8:
+			Sound.playSample(new File("08.wav"));
+			break;
+		case 9:
+			Sound.playSample(new File("09.wav"));
+			break;
+		case 10:
+			Sound.playSample(new File("10.wav"));
 			break;
 		default:
 			break;
