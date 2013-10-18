@@ -1,6 +1,7 @@
 package controller;
 
 import action.Moteur;
+import action.affichages.Son;
 import capteurs.* ;
 
 public class CapteurController {
@@ -24,6 +25,8 @@ public class CapteurController {
 	}
 
 	public void start(){
+		Capteur.calibrateRight();
+		Capteur.calibrateMiddle();
 		trc.start();
 		tmc.start();
 		tuc.start();
@@ -65,6 +68,9 @@ public class CapteurController {
 			break;
 		default:
 			break;
+		}
+		if(cc >= 0 && cc <= 10) {
+			new Son().playLego(cc);
 		}
 	}
 }

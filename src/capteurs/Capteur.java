@@ -1,7 +1,9 @@
 package capteurs;
 
 import controller.CapteurController;
+import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
+import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -29,5 +31,41 @@ public class Capteur implements Runnable {
 			} catch (InterruptedException ignore) {
 			}
 		}
+	}
+	
+	public static void calibrateRight() {
+		LCD.drawString("Droite blanc", 0, 0);
+		while(!Button.ENTER.isDown()) {
+			
+		}
+		ICapteursFonctions.RIGHT_LIGHT_BLANC = SensorPort.S3.readValue();
+		LCD.drawString("Droite gris", 0, 0);
+		while(!Button.ENTER.isDown()) {
+			
+		}
+		ICapteursFonctions.RIGHT_LIGHT_GRIS = SensorPort.S3.readValue();
+		LCD.drawString("Droite noir", 0, 0);
+		while(!Button.ENTER.isDown()) {
+			
+		}
+		ICapteursFonctions.RIGHT_LIGHT_NOIR = SensorPort.S3.readValue();
+	}
+	
+	public static void calibrateMiddle() {
+		LCD.drawString("Milieu blanc", 0, 0);
+		while(!Button.ENTER.isDown()) {
+			
+		}
+		ICapteursFonctions.MIDDLE_LIGHT_BLANC = SensorPort.S3.readValue();
+		LCD.drawString("Milieu gris", 0, 0);
+		while(!Button.ENTER.isDown()) {
+			
+		}
+		ICapteursFonctions.MIDDLE_LIGHT_GRIS = SensorPort.S3.readValue();
+		LCD.drawString("Milieu noir", 0, 0);
+		while(!Button.ENTER.isDown()) {
+			
+		}
+		ICapteursFonctions.MIDDLE_LIGHT_NOIR = SensorPort.S3.readValue();
 	}
 }
