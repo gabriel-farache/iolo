@@ -33,6 +33,7 @@ public class CapteursTest {
 
 			LCD.drawString("Ultrason : "+ (new Capteur(new UltrasonCapteur(),controller)).detecter()+ " cm",
 					0, 0);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
