@@ -10,6 +10,7 @@ public class UltrasonCapteur implements ICapteursFonctions  {
 	@Override
 	public int executerDetection() {
 		SensorPort.S4.activate();
+		Capteur.controller.setUc(sonic.getDistance());
 		return sonic.getDistance();
 	}
 

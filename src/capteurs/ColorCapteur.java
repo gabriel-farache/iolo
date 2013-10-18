@@ -10,6 +10,7 @@ public class ColorCapteur implements ICapteursFonctions {
 	@Override
 	public int executerDetection() {
 		SensorPort.S1.activate();
+		Capteur.controller.setCc(SensorPort.S1.readValue());
 		return SensorPort.S1.readValue();
 	}
 

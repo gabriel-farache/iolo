@@ -9,6 +9,7 @@ public class RightLightCapteur implements ICapteursFonctions{
 	@Override
 	public int executerDetection() {
 		SensorPort.S3.activate();
+		Capteur.controller.setRc(SensorPort.S3.readValue());
 		return SensorPort.S3.readValue();
 	}
 
