@@ -2,6 +2,7 @@ package controller;
 
 import action.Moteur;
 import capteurs.*;
+import action.affichages.Son;
 
 public class CapteurController {
 	public static final int CORRECTION_ANGLE = 7;
@@ -24,7 +25,9 @@ public class CapteurController {
 		moteur = new Moteur();
 	}
 
-	public void start() {
+	public void start(){
+		Capteur.calibrateRight();
+		Capteur.calibrateMiddle();
 		trc.start();
 		tmc.start();
 		tuc.start();
@@ -77,6 +80,9 @@ public class CapteurController {
 			break;
 		default:
 			break;
+		}
+		if(cc >= 0 && cc <= 10) {
+			new Son().playLego(cc);
 		}
 	}
 

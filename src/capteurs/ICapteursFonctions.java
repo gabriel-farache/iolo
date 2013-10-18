@@ -3,13 +3,13 @@ package capteurs;
 public interface ICapteursFonctions {
 	public final static int OFFSET = 4;
 	
-	public final static int RIGHT_LIGHT_NOIR = 30;
-	public final static int RIGHT_LIGHT_BLANC = 60;
-	public final static int RIGHT_LIGHT_GRIS = 40;
+	public static int RIGHT_LIGHT_NOIR = 30;
+	public static int RIGHT_LIGHT_BLANC = 60;
+	public static int RIGHT_LIGHT_GRIS = 40;
 	
-	public final static int MIDDLE_LIGHT_NOIR = 37;
-	public final static int MIDDLE_LIGHT_BLANC = 66;
-	public final static int MIDDLE_LIGHT_GRIS = 48;
+	public static int MIDDLE_LIGHT_NOIR = 37;
+	public static int MIDDLE_LIGHT_BLANC = 66;
+	public static int MIDDLE_LIGHT_GRIS = 48;
 	
 	public final static int COLOR_JAUNE = 4;
 	public final static int COLOR_ROUGE = 5;
