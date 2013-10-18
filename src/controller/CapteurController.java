@@ -1,51 +1,56 @@
 package controller;
 
 import action.Moteur;
-import capteurs.*;
-import action.affichages.Son;
+import capteurs.Capteur;
+import capteurs.ColorCapteur;
+import capteurs.ICapteursFonctions;
+import capteurs.LeftLightCapteur;
+import capteurs.MiddleLightCapteur;
+import capteurs.UltrasonCapteur;
 
 public class CapteurController {
 	public static final int CORRECTION_ANGLE = 7;
-	int rc;
+	int lc;
 	int mc;
 	int uc;
 	int cc;
-	Thread trc;
+	Thread tlc;
 	Thread tmc;
 	Thread tuc;
 	Thread tcc;
 	Moteur moteur;
-	boolean estEnVirage = false ;
+	boolean estEnVirage = false;
 
 	public void init() {
-		trc = new Thread(new Capteur(new RightLightCapteur(), this));
+		tlc = new Thread(new Capteur(new LeftLightCapteur(), this));
 		tmc = new Thread(new Capteur(new MiddleLightCapteur(), this));
 		tuc = new Thread(new Capteur(new UltrasonCapteur(), this));
 		tcc = new Thread(new Capteur(new ColorCapteur(), this));
 		moteur = new Moteur();
 	}
 
-	public void start(){
-		//Capteur.calibrateRight();
-		//Capteur.calibrateMiddle();
-		trc.start();
+	public void start() {
+		// Capteur.calibrateLeft();
+		// Capteur.calibrateMiddle();
+		tlc.start();
 		tmc.start();
 		tuc.start();
 		tcc.start();
 	}
 
-	public void setRc(int rc) {
-		this.rc = rc;
-		if (Math.abs(rc - Capteur.RIGHT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
-			estEnVirage = true ;
+	public void setRc(int lc) {
+		this.lc = lc;
+		if (Math.abs(lc - Capteur.LEFT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
+			estEnVirage = true;
 			moteur.ralentir(1f);
 			virageImminent();
-		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
+		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
 			moteur.turn(CORRECTION_ANGLE);
-		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) > ICapteursFonctions.OFFSET) && estEnVirage ) {
-			estEnVirage = false ;
+		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) > ICapteursFonctions.OFFSET)
+				&& estEnVirage) {
+			estEnVirage = false;
 			moteur.accelerer(2);
-		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET){
+		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) {
 			moteur.turn(-CORRECTION_ANGLE);
 		}
 	}
@@ -81,7 +86,23 @@ public class CapteurController {
 		default:
 			break;
 		}
-		
+
+	}
+
+	public int getLc() {
+		return lc;
+	}
+
+	public int getMc() {
+		return mc;
+	}
+
+	public int getUc() {
+		return uc;
+	}
+
+	public int getCc() {
+		return cc;
 	}
 
 	public void virageImminent() {

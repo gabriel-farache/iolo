@@ -11,7 +11,8 @@ public class ColorCapteur implements ICapteursFonctions {
 	public int executerDetection() {
 		SensorPort.S1.activate();
 		Capteur.controller.setCc(SensorPort.S1.readValue());
-		return SensorPort.S1.readValue();
+		
+		return Capteur.controller.getCc();
 	}
 
 }
