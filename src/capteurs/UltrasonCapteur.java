@@ -3,7 +3,7 @@ package capteurs;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
-public class Ultrason_Capteur implements ICapteursFonctions  {
+public class UltrasonCapteur implements ICapteursFonctions  {
 
 	UltrasonicSensor sonic = new UltrasonicSensor(SensorPort.S4);
 	

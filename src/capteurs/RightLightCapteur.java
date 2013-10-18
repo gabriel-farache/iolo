@@ -2,11 +2,11 @@ package capteurs;
 
 import lejos.nxt.SensorPort;
 
-public class Color_Capteur implements ICapteursFonctions {
+public class RightLightCapteur implements ICapteursFonctions{
 
 	@Override
 	public int executerDetection() {
-		return SensorPort.S1.readValue();
+		return SensorPort.S3.readValue();
 	}
 
 }

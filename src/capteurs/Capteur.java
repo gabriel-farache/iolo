@@ -8,7 +8,7 @@ public class Capteur {
 		this.capteur = capteur;
 	}
 	
-	public int detecterColeur() {
+	public int detecter() {
 		return this.capteur.executerDetection();
 	}
 }

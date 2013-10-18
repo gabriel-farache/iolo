@@ -2,7 +2,7 @@ package capteurs;
 
 import lejos.nxt.SensorPort;
 
-public class Right_Middle_Capteur implements ICapteursFonctions {
+public class MiddleLightCapteur implements ICapteursFonctions {
 
 	@Override
 	public int executerDetection() {
