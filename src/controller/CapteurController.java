@@ -1,7 +1,10 @@
 package controller;
 
+import javax.microedition.lcdui.Displayable;
+
 import action.Moteur;
 import capteurs.*;
+import action.affichages.Displays;
 import action.affichages.Son;
 
 public class CapteurController {
@@ -16,6 +19,7 @@ public class CapteurController {
 	Thread tcc;
 	Moteur moteur;
 	boolean estEnVirage = false ;
+	Displays display = new Displays();
 
 	public void init() {
 		trc = new Thread(new Capteur(new RightLightCapteur(), this));
@@ -23,6 +27,7 @@ public class CapteurController {
 		tuc = new Thread(new Capteur(new UltrasonCapteur(), this));
 		tcc = new Thread(new Capteur(new ColorCapteur(), this));
 		moteur = new Moteur();
+		moteur.avancer(1f);
 	}
 
 	public void start(){
@@ -37,25 +42,33 @@ public class CapteurController {
 	public void setRc(int rc) {
 		this.rc = rc;
 		if (Math.abs(rc - Capteur.RIGHT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
-			estEnVirage = true ;
-			moteur.ralentir(1f);
-			virageImminent();
+			//estEnVirage = true ;
+			moteur.ralentir(0.5f);
+			display.displaysNumber(1000);
+			//virageImminent();
+			
 		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
+			display.displaysNumber(2000);
+		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) && estEnVirage 
+				&& !(Math.abs(mc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) ) {
+			display.displaysNumber(3000);
 			moteur.turn(CORRECTION_ANGLE);
-		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) > ICapteursFonctions.OFFSET) && estEnVirage ) {
+		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
+				&& (Math.abs(mc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)){
 			estEnVirage = false ;
-			moteur.accelerer(2);
-		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET){
-			moteur.turn(-CORRECTION_ANGLE);
+			display.displaysNumber(4000);
+			moteur.accelerer(1f);
 		}
 	}
 
 	public void setMc(int mc) {
 		this.mc = mc;
 		if (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET) {
-			moteur.turn(0);
+			//display.displaysNumber(1000);
+			
 		} else {
-			moteur.turn(-CORRECTION_ANGLE);
+			//display.displaysNumber(2000);
+			//moteur.turn(-CORRECTION_ANGLE);
 		}
 	}
 
