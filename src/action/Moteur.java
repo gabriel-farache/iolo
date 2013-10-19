@@ -1,68 +1,76 @@
 package action;
 
-import lejos.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import lejos.nxt.BasicMotor;
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
+import lejos.nxt.MotorPort;
+import lejos.nxt.NXTMotor;
 
+public class Moteur extends BasicMotor {
+	public static boolean semaphore = true;
+	private static int speedMax = 87;
+	private NXTMotor motorLeft;
+	private NXTMotor motorRight;
+	private Map<Integer,Integer> mapVirage ;
 
-public class Moteur {
-	
-	private float speedB ;
-	private float speedC ;
-	
-	public void avancer(float nbTour)
-	{
+	public Moteur() {
+		motorLeft = new NXTMotor(MotorPort.B);
+		motorRight = new NXTMotor(MotorPort.C);
+		mapVirage = new HashMap<>();
+		mapVirage.put(0, 10);
+		mapVirage.put(1, 30);
+		mapVirage.put(2,18);
+		mapVirage.put(3,24);
+		mapVirage.put(4,30);
+	}
+
+	public void avancer() {
 		Button.waitForAnyPress();
-		speedB = nbTour * 360 ;
-		speedC = speedB ;
-		Motor.B.setSpeed(speedB);
-		Motor.C.setSpeed(speedC);
-		Motor.B.forward();
-		Motor.C.forward();
-		
+		motorLeft.setPower(speedMax);
+		motorRight.setPower(speedMax);
+	}
+
+	public void stop() {
+		motorLeft.setPower(0);
+		motorRight.setPower(0);
+	}
+
+	public void turnLeftRac(){
+		motorLeft.setPower(speedMax);
+		motorRight.setPower(speedMax);
+		Motor.B.rotate(90);
 	}
 	
-	public void stop()
-	{
-		Motor.B.stop();
-		Motor.C.stop();
+	public void turnRightRac(){
+		motorLeft.setPower(speedMax);
+		motorRight.setPower(speedMax);
+		Motor.C.rotate(-90);
 	}
 	
-	public void turn(int angle)
-	{
-		Motor.B.rotate(angle);
-		Motor.C.rotate(angle);
+	public void turnLeft(int virage) {
+		motorLeft.setPower(speedMax - mapVirage.get(virage));
+		motorRight.setPower(speedMax);
 	}
-	
-	public void turnLeft(int angle){
-		Motor.B.rotate(angle,true);
-		Motor.B.setSpeed(speedB);
-		Motor.B.forward();
+
+	public void turnRight(int virage) {
+		motorRight.setPower(speedMax - mapVirage.get(virage));
+		motorLeft.setPower(speedMax);		
 	}
-	
-	public void turnRight(int angle){
-		Motor.C.rotate(angle,true);
-		Motor.C.setSpeed(speedC);
-		Motor.C.forward();
+
+	public void ralentir() {
+		speedMax = 67;
+		motorLeft.setPower(speedMax);
+		motorRight.setPower(speedMax);
+
 	}
-	
-	public void ralentir(float nbTour)
-	{
-		speedB = nbTour * 360;
-		speedC = speedB ;
-		Motor.B.setSpeed(speedB);
-		Motor.C.setSpeed(speedC);
-		//Motor.B.forward();
-		//Motor.C.forward();
-		
+
+	public void accelerer() {
+		speedMax = 80;
+		motorLeft.setPower(speedMax);
+		motorRight.setPower(speedMax);
 	}
-	
-	public void accelerer(float nbTour)
-	{
-		speedB = nbTour * 360;
-		speedC = speedB ;
-		Motor.B.setSpeed(speedB);
-		Motor.C.setSpeed(speedC);
-	}
-	
+
 }

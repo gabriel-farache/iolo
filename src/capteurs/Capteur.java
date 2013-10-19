@@ -13,7 +13,7 @@ public class Capteur implements Runnable {
 	public static int MIDDLE_LIGHT_NOIR = 37;
 	public static int MIDDLE_LIGHT_BLANC = 66;
 	public static int MIDDLE_LIGHT_GRIS = 48;
-	public static final int SLEEP_TIME = 20;
+	public static final int SLEEP_TIME = 10;
 	private ICapteursFonctions capteur;
 	protected static CapteurController controller;
 
@@ -28,7 +28,7 @@ public class Capteur implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (CapteurController.continu) {
 			this.capteur.executerDetection();
 			try {
 				Thread.sleep(SLEEP_TIME);
