@@ -54,6 +54,7 @@ public class CapteurController {
 		moteur.avancer();
 		while (true) {
 			handle();
+			handleTour();
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -63,69 +64,7 @@ public class CapteurController {
 		}
 	}
 
-	public void handle() {
-		if ((lc <= Capteur.LEFT_LIGHT_GRIS + ICapteursFonctions.OFFSET)
-				&& (lc >= Capteur.LEFT_LIGHT_GRIS - ICapteursFonctions.OFFSET)) {
-			// LC = 0.5 -> Entrée virage
-
-			if (debug) {
-				LCD.drawString("Entree virage", 0, 0);
-			}
-			estEnVirage = true;
-			moteur.ralentir();
-
-		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) <= ICapteursFonctions.OFFSET
-				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) <= ICapteursFonctions.OFFSET)) {
-			// Cas normal : lc = 0 && mc = 1
-			if (debug) {
-				LCD.drawString("Cas bon", 0, 0);
-			}
-
-		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) <= ICapteursFonctions.OFFSET)
-				&& (!(Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) <= ICapteursFonctions.OFFSET))) {
-			// lc = 1 && mc != 0
-			if (debug) {
-				LCD.drawString("Tourner gauche", 0, 0);
-			}
-			moteur.turnLeft(estEnVirage ? 1 : 0);
-		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) <= ICapteursFonctions.OFFSET)
-				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) <= ICapteursFonctions.OFFSET)) {
-			// je sors du virage, je vois noir sur middle et ggauche
-			// je reaccelere
-			estEnVirage = false;
-			if (debug) {
-				LCD.drawString("Sortie virage", 0, 0);
-			}
-			moteur.accelerer();
-		} else if ((!(Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) <= ICapteursFonctions.OFFSET))
-				&& (Math.abs(mc - Capteur.LEFT_LIGHT_BLANC) <= ICapteursFonctions.OFFSET)) {
-			if (debug) {
-				LCD.drawString("Tourner a droite", 0, 0);
-			}
-			moteur.turnRight(estEnVirage ? 1 : 0);
-		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_GRIS) <= ICapteursFonctions.OFFSET)
-				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_BLANC) <= ICapteursFonctions.OFFSET)) {
-			if (debug) {
-				LCD.drawString("Tourner a gauche", 0, 0);
-			}
-			moteur.turnLeft(estEnVirage ? 1 : 0);
-		} else {
-			LCD.clear();
-			LCD.drawString("ERREUR", 0, 0);
-		}
-
-	}
-
-	public synchronized void setLc(int lc) {
-		this.lc = lc;
-	}
-
-	public synchronized void setMc(int mc) {
-		this.mc = mc;
-	}
-
-	public synchronized void setUc(int uc) {
-		this.uc = uc;
+	public void handleTour() {
 		if ((uc < 26) && tour <= 3) {
 			tour++;
 			son.playLego(tour);
@@ -140,6 +79,90 @@ public class CapteurController {
 			moteur.stop();
 			continu = false;
 		}
+	}
+
+	public void handle() {
+		/*
+		 * if ((lc <= Capteur.LEFT_LIGHT_GRIS + ICapteursFonctions.OFFSET) &&
+		 * (lc >= Capteur.LEFT_LIGHT_GRIS - ICapteursFonctions.OFFSET)) { // LC
+		 * = 0.5 -> Entrée virage
+		 * 
+		 * if (debug) { LCD.drawString("Entree virage", 0, 0); } estEnVirage =
+		 * true; moteur.ralentir();
+		 * 
+		 * } else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) <=
+		 * ICapteursFonctions.OFFSET && (Math.abs(mc -
+		 * Capteur.MIDDLE_LIGHT_NOIR) <= ICapteursFonctions.OFFSET)) { // Cas
+		 * normal : lc = 0 && mc = 1 if (debug) { LCD.drawString("Cas bon", 0,
+		 * 0); }
+		 * 
+		 * } else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) <=
+		 * ICapteursFonctions.OFFSET) && (!(Math.abs(mc -
+		 * Capteur.MIDDLE_LIGHT_NOIR) <= ICapteursFonctions.OFFSET))) { // lc =
+		 * 1 && mc != 0 if (debug) { LCD.drawString("Tourner gauche", 0, 0); }
+		 * moteur.turnLeft(estEnVirage ? 1 : 0); } else if ((Math.abs(lc -
+		 * Capteur.LEFT_LIGHT_NOIR) <= ICapteursFonctions.OFFSET) &&
+		 * (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) <=
+		 * ICapteursFonctions.OFFSET)) { // je sors du virage, je vois noir sur
+		 * middle et ggauche // je reaccelere estEnVirage = false; if (debug) {
+		 * LCD.drawString("Sortie virage", 0, 0); } moteur.accelerer(); } else
+		 * if ((!(Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) <=
+		 * ICapteursFonctions.OFFSET)) && (Math.abs(lc -
+		 * Capteur.LEFT_LIGHT_BLANC) <= ICapteursFonctions.OFFSET)) { if (debug)
+		 * { LCD.drawString("Tourner a droite", 0, 0); }
+		 * moteur.turnRight(estEnVirage ? 1 : 0); } else if ((Math.abs(lc -
+		 * Capteur.LEFT_LIGHT_GRIS) <= ICapteursFonctions.OFFSET) &&
+		 * (Math.abs(mc - Capteur.MIDDLE_LIGHT_BLANC) <=
+		 * ICapteursFonctions.OFFSET)) { if (debug) {
+		 * LCD.drawString("Tourner a gauche", 0, 0); }
+		 * moteur.turnLeft(estEnVirage ? 1 : 0); } else { moteur.accelerer(); }
+		 */
+		int moyLc = (Capteur.LEFT_LIGHT_NOIR + Capteur.LEFT_LIGHT_BLANC) / 2;
+		int moyMc = (Capteur.MIDDLE_LIGHT_BLANC + Capteur.MIDDLE_LIGHT_NOIR) / 2;
+		
+		if (lc <= moyLc - ICapteursFonctions.OFFSET) {
+			moteur.ralentir();
+			moteur.turnLeft(estEnVirage ? 1 : 0);
+			LCD.clear();
+			LCD.drawString("Tourner a gauche", 0, 0); 
+			LCD.drawString("lc :"+lc+" - moy :"+moyLc, 0, 4);
+			estEnVirage = true;
+		}
+		if (mc >= moyMc + ICapteursFonctions.OFFSET) {
+			moteur.turnRight(estEnVirage ? 1 : 0);
+			LCD.clear();
+			LCD.drawString("Tourner a droite", 0, 0); 
+			LCD.drawString("mc :"+mc+" - moy :"+moyMc, 0, 4);
+		} else if (mc <= moyMc - ICapteursFonctions.OFFSET) {
+			moteur.turnLeft(estEnVirage ? 1 : 0);
+			LCD.clear();
+			LCD.drawString("Tourner a gauche", 0, 0); 
+			LCD.drawString("mc :"+mc+" - moy :"+moyMc, 0, 4);
+		} else if (lc <= moyLc - ICapteursFonctions.OFFSET) {
+			moteur.accelerer();
+			LCD.clear();
+			LCD.drawString("Accelerer", 0, 0); 
+			LCD.drawString("lc :"+lc+" - moy :"+moyLc, 0, 4);
+			estEnVirage = false;
+		} else if (lc >= moyLc + ICapteursFonctions.OFFSET){
+			moteur.turnRight(estEnVirage ? 1 : 0);
+			LCD.clear();
+			LCD.drawString("Tourner a droite", 0, 0); 
+			LCD.drawString("lc :"+lc+" - moy :"+moyLc, 0, 4);
+		}
+
+	}
+
+	public synchronized void setLc(int lc) {
+		this.lc = lc;
+	}
+
+	public synchronized void setMc(int mc) {
+		this.mc = mc;
+	}
+
+	public synchronized void setUc(int uc) {
+		this.uc = uc;
 	}
 
 	public synchronized void setCc(int cc) {
