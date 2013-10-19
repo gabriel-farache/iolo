@@ -44,10 +44,12 @@ public class CapteurController {
 		Thread.sleep(5);
 		tcc.start();
 		moteur.avancer(1f);
+		while(true){
+			handle();
+		}
 	}
 
-	public void setLc(int lc) {
-		this.lc = lc;
+	public void handle(){
 		if (Math.abs(lc - Capteur.LEFT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
 			// LC = 0.5 -> Entrée virage
 			moteur.ralentir(1f);
@@ -69,7 +71,7 @@ public class CapteurController {
 				LCD.clear();
 				LCD.drawString("Tourner gauche", 0, 0);
 			}
-			moteur.turnRight(-CORRECTION_ANGLE);
+			moteur.turnRight(CORRECTION_ANGLE);
 		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)
 				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET)) {
 			// lc = 1 && mc = 1
@@ -89,16 +91,20 @@ public class CapteurController {
 			}
 		}
 	}
+	
+	public synchronized void setLc(int lc) {
+		this.lc = lc;		
+	}
 
-	public void setMc(int mc) {
+	public synchronized void setMc(int mc) {
 		this.mc = mc;
 	}
 
-	public void setUc(int uc) {
+	public synchronized void setUc(int uc) {
 		this.uc = uc;
 	}
 
-	public void setCc(int cc) {
+	public synchronized void setCc(int cc) {
 		this.cc = cc;
 		switch (cc) {
 		case ICapteursFonctions.COLOR_BLEU:

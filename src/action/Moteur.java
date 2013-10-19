@@ -35,13 +35,13 @@ public class Moteur {
 	}
 	
 	public void turnLeft(int angle){
-		Motor.B.rotate(angle);
+		Motor.B.rotate(angle,true);
 		Motor.B.setSpeed(speedB);
 		Motor.B.forward();
 	}
 	
 	public void turnRight(int angle){
-		Motor.C.rotate(angle);
+		Motor.C.rotate(angle,true);
 		Motor.C.setSpeed(speedC);
 		Motor.C.forward();
 	}
