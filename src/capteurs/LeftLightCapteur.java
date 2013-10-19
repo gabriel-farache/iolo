@@ -3,14 +3,15 @@ package capteurs;
 import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 
-public class RightLightCapteur implements ICapteursFonctions{
+public class LeftLightCapteur implements ICapteursFonctions{
 
 	LightSensor light = new LightSensor(SensorPort.S3);
 	@Override
 	public int executerDetection() {
 		SensorPort.S3.activate();
-		Capteur.controller.setRc(SensorPort.S3.readValue());
-		return SensorPort.S3.readValue();
+		Capteur.controller.setLc(SensorPort.S3.readValue());
+		
+		return Capteur.controller.getLc();
 	}
 
 }

@@ -11,7 +11,8 @@ public class UltrasonCapteur implements ICapteursFonctions  {
 	public int executerDetection() {
 		SensorPort.S4.activate();
 		Capteur.controller.setUc(sonic.getDistance());
-		return sonic.getDistance();
+		
+		return Capteur.controller.getUc();
 	}
 
 }

@@ -1,19 +1,21 @@
 package controller;
 
-import javax.microedition.lcdui.Displayable;
-
 import action.Moteur;
-import capteurs.*;
 import action.affichages.Displays;
-import action.affichages.Son;
+import capteurs.Capteur;
+import capteurs.ColorCapteur;
+import capteurs.ICapteursFonctions;
+import capteurs.LeftLightCapteur;
+import capteurs.MiddleLightCapteur;
+import capteurs.UltrasonCapteur;
 
 public class CapteurController {
 	public static final int CORRECTION_ANGLE = 7;
-	int rc;
+	int lc;
 	int mc;
 	int uc;
 	int cc;
-	Thread trc;
+	Thread tlc;
 	Thread tmc;
 	Thread tuc;
 	Thread tcc;
@@ -21,8 +23,9 @@ public class CapteurController {
 	boolean estEnVirage = false ;
 	Displays display = new Displays();
 
+
 	public void init() {
-		trc = new Thread(new Capteur(new RightLightCapteur(), this));
+		tlc = new Thread(new Capteur(new LeftLightCapteur(), this));
 		tmc = new Thread(new Capteur(new MiddleLightCapteur(), this));
 		tuc = new Thread(new Capteur(new UltrasonCapteur(), this));
 		tcc = new Thread(new Capteur(new ColorCapteur(), this));
@@ -30,31 +33,31 @@ public class CapteurController {
 		moteur.avancer(1f);
 	}
 
-	public void start(){
-		//Capteur.calibrateRight();
-		//Capteur.calibrateMiddle();
-		trc.start();
+	public void start() {
+		Capteur.calibrateLeft();
+		Capteur.calibrateMiddle();
+		tlc.start();
 		tmc.start();
 		tuc.start();
 		tcc.start();
 	}
 
-	public void setRc(int rc) {
-		this.rc = rc;
-		if (Math.abs(rc - Capteur.RIGHT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
+	public void setLc(int lc) {
+		this.lc = lc;
+		if (Math.abs(lc - Capteur.LEFT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
 			//estEnVirage = true ;
 			moteur.ralentir(0.5f);
 			display.displaysNumber(1000);
 			//virageImminent();
 			
-		} else if (Math.abs(rc - Capteur.RIGHT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
+		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
 			display.displaysNumber(2000);
-		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) && estEnVirage 
-				&& !(Math.abs(mc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) ) {
+		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) && estEnVirage 
+				&& !(Math.abs(mc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) ) {
 			display.displaysNumber(3000);
 			moteur.turn(CORRECTION_ANGLE);
-		} else if ((Math.abs(rc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
-				&& (Math.abs(mc - Capteur.RIGHT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)){
+		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
+				&& (Math.abs(mc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)){
 			estEnVirage = false ;
 			display.displaysNumber(4000);
 			moteur.accelerer(1f);
@@ -94,7 +97,23 @@ public class CapteurController {
 		default:
 			break;
 		}
-		
+
+	}
+
+	public int getLc() {
+		return lc;
+	}
+
+	public int getMc() {
+		return mc;
+	}
+
+	public int getUc() {
+		return uc;
+	}
+
+	public int getCc() {
+		return cc;
 	}
 
 	public void virageImminent() {

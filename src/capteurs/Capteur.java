@@ -1,17 +1,14 @@
 package capteurs;
 
-import controller.CapteurController;
 import lejos.nxt.Button;
-import lejos.nxt.ColorSensor;
 import lejos.nxt.LCD;
-import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.UltrasonicSensor;
+import controller.CapteurController;
 
 public class Capteur implements Runnable {
-	public static int RIGHT_LIGHT_NOIR = 30;
-	public static int RIGHT_LIGHT_BLANC = 60;
-	public static int RIGHT_LIGHT_GRIS = 40;
+	public static int LEFT_LIGHT_NOIR = 30;
+	public static int LEFT_LIGHT_BLANC = 60;
+	public static int LEFT_LIGHT_GRIS = 40;
 
 	public static int MIDDLE_LIGHT_NOIR = 37;
 	public static int MIDDLE_LIGHT_BLANC = 66;
@@ -22,7 +19,7 @@ public class Capteur implements Runnable {
 
 	public Capteur(ICapteursFonctions capteur, CapteurController controller) {
 		this.capteur = capteur;
-		this.controller = controller;
+		Capteur.controller = controller;
 	}
 
 	public int detecter() {
@@ -40,24 +37,24 @@ public class Capteur implements Runnable {
 		}
 	}
 
-	public static void calibrateRight() {
+	public static void calibrateLeft() {
 		LCD.drawString("Droite blanc", 0, 0);
 		while (!Button.ENTER.isDown()) {
 
 		}
 		LCD.clear();
-		Capteur.RIGHT_LIGHT_BLANC = SensorPort.S3.readValue();
+		Capteur.LEFT_LIGHT_BLANC = SensorPort.S3.readValue();
 		LCD.drawString("Droite gris", 0, 0);
 		while (!Button.ENTER.isDown()) {
 
 		}
 		LCD.clear();
-		Capteur.RIGHT_LIGHT_GRIS = SensorPort.S3.readValue();
+		Capteur.LEFT_LIGHT_GRIS = SensorPort.S3.readValue();
 		LCD.drawString("Droite noir", 0, 0);
 		while (!Button.ENTER.isDown()) {
 
 		}
-		Capteur.RIGHT_LIGHT_NOIR = SensorPort.S3.readValue();
+		Capteur.LEFT_LIGHT_NOIR = SensorPort.S3.readValue();
 	}
 
 	public static void calibrateMiddle() {

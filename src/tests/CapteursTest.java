@@ -4,7 +4,7 @@ import controller.CapteurController;
 import capteurs.Capteur;
 import capteurs.ColorCapteur;
 import capteurs.MiddleLightCapteur;
-import capteurs.RightLightCapteur;
+import capteurs.LeftLightCapteur;
 import capteurs.UltrasonCapteur;
 import lejos.nxt.LCD;
 
@@ -16,7 +16,7 @@ public class CapteursTest {
 	public static void main(String[] args) {
 		CapteurController controller = new CapteurController();
 		LCD.drawString(
-				"RL : " + (new Capteur(new RightLightCapteur(),controller)).detecter(), 0,
+				"RL : " + (new Capteur(new LeftLightCapteur(),controller)).detecter(), 0,
 				0);
 		try {
 			Thread.sleep(1000);
