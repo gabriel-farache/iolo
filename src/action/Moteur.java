@@ -7,12 +7,16 @@ import lejos.nxt.Motor;
 
 public class Moteur {
 	
+	private float speedB ;
+	private float speedC ;
+	
 	public void avancer(float nbTour)
 	{
 		Button.waitForAnyPress();
-		float speed = nbTour * 360;
-		Motor.B.setSpeed(speed);
-		Motor.C.setSpeed(speed);
+		speedB = nbTour * 360 ;
+		speedC = speedB ;
+		Motor.B.setSpeed(speedB);
+		Motor.C.setSpeed(speedC);
 		Motor.B.forward();
 		Motor.C.forward();
 		
@@ -26,15 +30,28 @@ public class Moteur {
 	
 	public void turn(int angle)
 	{
-		Motor.B.rotate(angle,true);
-		Motor.C.rotate(angle,true);
+		Motor.B.rotate(angle);
+		Motor.C.rotate(angle);
+	}
+	
+	public void turnLeft(int angle){
+		Motor.B.rotate(angle);
+		Motor.B.setSpeed(speedB);
+		Motor.B.forward();
+	}
+	
+	public void turnRight(int angle){
+		Motor.C.rotate(angle);
+		Motor.C.setSpeed(speedC);
+		Motor.C.forward();
 	}
 	
 	public void ralentir(float nbTour)
 	{
-		float speed = nbTour * 360;
-		Motor.B.setSpeed(speed);
-		Motor.C.setSpeed(speed);
+		speedB = nbTour * 360;
+		speedC = speedB ;
+		Motor.B.setSpeed(speedB);
+		Motor.C.setSpeed(speedC);
 		//Motor.B.forward();
 		//Motor.C.forward();
 		
@@ -42,9 +59,10 @@ public class Moteur {
 	
 	public void accelerer(float nbTour)
 	{
-		float speed = nbTour * 360;
-		Motor.B.setSpeed(speed);
-		Motor.C.setSpeed(speed);
+		speedB = nbTour * 360;
+		speedC = speedB ;
+		Motor.B.setSpeed(speedB);
+		Motor.C.setSpeed(speedC);
 	}
 	
 }

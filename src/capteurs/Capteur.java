@@ -13,7 +13,7 @@ public class Capteur implements Runnable {
 	public static int MIDDLE_LIGHT_NOIR = 37;
 	public static int MIDDLE_LIGHT_BLANC = 66;
 	public static int MIDDLE_LIGHT_GRIS = 48;
-	public static final int SLEEP_TIME = 200;
+	public static final int SLEEP_TIME = 400;
 	private ICapteursFonctions capteur;
 	protected static CapteurController controller;
 
@@ -38,43 +38,34 @@ public class Capteur implements Runnable {
 	}
 
 	public static void calibrateLeft() {
-		LCD.drawString("Droite blanc", 0, 0);
-		while (!Button.ENTER.isDown()) {
-
-		}
+		LCD.drawString("Gauche blanc", 0, 0);
+		Button.ENTER.waitForPress();
 		LCD.clear();
 		Capteur.LEFT_LIGHT_BLANC = SensorPort.S3.readValue();
-		LCD.drawString("Droite gris", 0, 0);
-		while (!Button.ENTER.isDown()) {
-
-		}
+		LCD.drawString(Capteur.LEFT_LIGHT_BLANC+"  Gauche gris", 0, 0);
+		Button.ENTER.waitForPress();
 		LCD.clear();
 		Capteur.LEFT_LIGHT_GRIS = SensorPort.S3.readValue();
-		LCD.drawString("Droite noir", 0, 0);
-		while (!Button.ENTER.isDown()) {
-
-		}
+		LCD.drawString(Capteur.LEFT_LIGHT_GRIS+"  Gauche noir", 0, 0);
+		Button.ENTER.waitForPress();
 		Capteur.LEFT_LIGHT_NOIR = SensorPort.S3.readValue();
 	}
 
 	public static void calibrateMiddle() {
 		LCD.clear();
-		LCD.drawString("Milieu blanc", 0, 0);
-		while (!Button.ENTER.isDown()) {
-
-		}
-		Capteur.MIDDLE_LIGHT_BLANC = SensorPort.S3.readValue();
+		LCD.drawString(LEFT_LIGHT_NOIR+"  Milieu blanc", 0, 0);
+		Button.ENTER.waitForPress();
+		Capteur.MIDDLE_LIGHT_BLANC = SensorPort.S2.readValue();
 		LCD.clear();
-		LCD.drawString("Milieu gris", 0, 0);
-		while (!Button.ENTER.isDown()) {
-
-		}
-		Capteur.MIDDLE_LIGHT_GRIS = SensorPort.S3.readValue();
+		LCD.drawString(MIDDLE_LIGHT_BLANC+"  Milieu gris", 0, 0);
+		Button.ENTER.waitForPress();
+		Capteur.MIDDLE_LIGHT_GRIS = SensorPort.S2.readValue();
 		LCD.clear();
-		LCD.drawString("Milieu noir", 0, 0);
-		while (!Button.ENTER.isDown()) {
+		LCD.drawString(MIDDLE_LIGHT_GRIS+"  Milieu noir", 0, 0);
+		Button.ENTER.waitForPress();
+		Capteur.MIDDLE_LIGHT_NOIR = SensorPort.S2.readValue();
+		LCD.clear();
+		LCD.drawInt(Capteur.MIDDLE_LIGHT_NOIR, 0, 0);
 
-		}
-		Capteur.MIDDLE_LIGHT_NOIR = SensorPort.S3.readValue();
 	}
 }

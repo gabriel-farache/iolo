@@ -11,7 +11,12 @@ public class Main {
 	public static void main(String[] args) {
 		CapteurController controller = new CapteurController();
 		controller.init();
-		controller.start();
+		try {
+			controller.start();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

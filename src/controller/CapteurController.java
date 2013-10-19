@@ -1,5 +1,6 @@
 package controller;
 
+import lejos.nxt.LCD;
 import action.Moteur;
 import action.affichages.Displays;
 import capteurs.Capteur;
@@ -10,7 +11,7 @@ import capteurs.MiddleLightCapteur;
 import capteurs.UltrasonCapteur;
 
 public class CapteurController {
-	public static final int CORRECTION_ANGLE = 7;
+	public static final int CORRECTION_ANGLE = 30;
 	int lc;
 	int mc;
 	int uc;
@@ -30,37 +31,49 @@ public class CapteurController {
 		tuc = new Thread(new Capteur(new UltrasonCapteur(), this));
 		tcc = new Thread(new Capteur(new ColorCapteur(), this));
 		moteur = new Moteur();
-		moteur.avancer(1f);
 	}
 
-	public void start() {
+	public void start() throws InterruptedException {
 		Capteur.calibrateLeft();
 		Capteur.calibrateMiddle();
 		tlc.start();
+		Thread.sleep(100);
 		tmc.start();
+		Thread.sleep(100);
 		tuc.start();
+		Thread.sleep(100);
 		tcc.start();
+		moteur.avancer(1f);
 	}
 
 	public void setLc(int lc) {
 		this.lc = lc;
 		if (Math.abs(lc - Capteur.LEFT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
-			//estEnVirage = true ;
 			moteur.ralentir(0.5f);
 			display.displaysNumber(1000);
-			//virageImminent();
+			LCD.clear();
+			LCD.drawString("t1 : GRIS - NOIR", 0, 0);
 			
 		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
 			display.displaysNumber(2000);
-		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) && estEnVirage 
-				&& !(Math.abs(mc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) ) {
-			display.displaysNumber(3000);
-			moteur.turn(CORRECTION_ANGLE);
+			LCD.clear();
+			LCD.drawString("t2 : BLANC - NOIR", 0, 0);
 		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
-				&& (Math.abs(mc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)){
+				&& (!(Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET))) {
+			LCD.clear();
+			LCD.drawString("t3 : NOIR - AUTRE", 0, 0);
+			display.displaysNumber(3000);
+			moteur.turnRight(-CORRECTION_ANGLE);
+		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
+				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET)){
 			estEnVirage = false ;
 			display.displaysNumber(4000);
 			moteur.accelerer(1f);
+			LCD.clear();
+			LCD.drawString("t4 : NOIR - NOIR", 0, 0);
+		} else {
+			LCD.clear();
+			LCD.drawString("ERREUR LC: "+lc, 0, 0);
 		}
 	}
 

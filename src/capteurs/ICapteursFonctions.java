@@ -1,7 +1,7 @@
 package capteurs;
 
 public interface ICapteursFonctions {
-	public final static int OFFSET = 4;
+	public final static int OFFSET = 3;
 	
 	public final static int COLOR_JAUNE = 4;
 	public final static int COLOR_ROUGE = 5;
