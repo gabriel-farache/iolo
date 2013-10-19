@@ -11,6 +11,7 @@ import capteurs.MiddleLightCapteur;
 import capteurs.UltrasonCapteur;
 
 public class CapteurController {
+	boolean debug = false;
 	public static final int CORRECTION_ANGLE = 30;
 	int lc;
 	int mc;
@@ -21,9 +22,8 @@ public class CapteurController {
 	Thread tuc;
 	Thread tcc;
 	Moteur moteur;
-	boolean estEnVirage = false ;
+	boolean estEnVirage = false;
 	Displays display = new Displays();
-
 
 	public void init() {
 		tlc = new Thread(new Capteur(new LeftLightCapteur(), this));
@@ -37,11 +37,11 @@ public class CapteurController {
 		Capteur.calibrateLeft();
 		Capteur.calibrateMiddle();
 		tlc.start();
-		Thread.sleep(100);
+		Thread.sleep(20);
 		tmc.start();
-		Thread.sleep(100);
+		Thread.sleep(20);
 		tuc.start();
-		Thread.sleep(100);
+		Thread.sleep(20);
 		tcc.start();
 		moteur.avancer(1f);
 	}
@@ -49,43 +49,51 @@ public class CapteurController {
 	public void setLc(int lc) {
 		this.lc = lc;
 		if (Math.abs(lc - Capteur.LEFT_LIGHT_GRIS) < ICapteursFonctions.OFFSET) {
+			// entrée virage, je ralenti
 			moteur.ralentir(0.5f);
-			display.displaysNumber(1000);
-			LCD.clear();
-			LCD.drawString("t1 : GRIS - NOIR", 0, 0);
-			
-		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) < ICapteursFonctions.OFFSET) {
-			display.displaysNumber(2000);
-			LCD.clear();
-			LCD.drawString("t2 : BLANC - NOIR", 0, 0);
-		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
+			if (debug) {
+				display.displaysNumber(1000);
+				LCD.clear();
+				LCD.drawString("t1 : GRIS - NOIR", 0, 0);
+			}
+
+		} else if (Math.abs(lc - Capteur.LEFT_LIGHT_BLANC) < ICapteursFonctions.OFFSET
+				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET)) {
+			// cas normal : gauche voit blanc et middle voit noir
+			if (debug) {
+				display.displaysNumber(2000);
+				LCD.clear();
+				LCD.drawString("t2 : BLANC - NOIR", 0, 0);
+			}
+		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)
 				&& (!(Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET))) {
-			LCD.clear();
-			LCD.drawString("t3 : NOIR - AUTRE", 0, 0);
-			display.displaysNumber(3000);
+			// je devie : middle voit pas noir et gauche voit noir -> je devie a gauche
+			if (debug) {
+				LCD.clear();
+				LCD.drawString("t3 : NOIR - AUTRE", 0, 0);
+				display.displaysNumber(3000);
+			}
 			moteur.turnRight(-CORRECTION_ANGLE);
-		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET) 
-				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET)){
-			estEnVirage = false ;
-			display.displaysNumber(4000);
+		} else if ((Math.abs(lc - Capteur.LEFT_LIGHT_NOIR) < ICapteursFonctions.OFFSET)
+				&& (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET)) {
+			// je sors du virage, je vois noir sur middle et ggauche
+			// je reaccelere
+			estEnVirage = false;
+			if (debug) {
+				display.displaysNumber(4000);
+				LCD.clear();
+				LCD.drawString("t4 : NOIR - NOIR", 0, 0);
+			}
 			moteur.accelerer(1f);
-			LCD.clear();
-			LCD.drawString("t4 : NOIR - NOIR", 0, 0);
+
 		} else {
 			LCD.clear();
-			LCD.drawString("ERREUR LC: "+lc, 0, 0);
+			LCD.drawString("ERREUR LC: " + lc, 0, 0);
 		}
 	}
 
 	public void setMc(int mc) {
 		this.mc = mc;
-		if (Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET) {
-			//display.displaysNumber(1000);
-			
-		} else {
-			//display.displaysNumber(2000);
-			//moteur.turn(-CORRECTION_ANGLE);
-		}
 	}
 
 	public void setUc(int uc) {
@@ -100,6 +108,10 @@ public class CapteurController {
 		case ICapteursFonctions.COLOR_JAUNE:
 			break;
 		case ICapteursFonctions.COLOR_NOIR:
+			if (!(Math.abs(mc - Capteur.MIDDLE_LIGHT_NOIR) < ICapteursFonctions.OFFSET)) {
+				// couleur detecte noir et middle n'est pas noir
+				moteur.turnLeft(CORRECTION_ANGLE);
+			}
 			break;
 		case ICapteursFonctions.COLOR_ROUGE:
 			break;
